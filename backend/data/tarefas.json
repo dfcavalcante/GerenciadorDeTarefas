@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "titulo": "Configurar ambiente de desenvolvimento",
+    "status": "concluida",
+    "tempo_pomodoro_minutos": 25
+  },
+  {
+    "id": 2,
+    "titulo": "Criar a API de tarefas com Flask",
+    "status": "pendente",
+    "tempo_pomodoro_minutos": 50
+  },
+  {
+    "id": 3,
+    "titulo": "Estruturar o projeto frontend com React",
+    "status": "pendente",
+    "tempo_pomodoro_minutos": 25
+  }
+]
