@@ -4,11 +4,12 @@ import React from 'react';
 import './App.css'; // Mantenha este import para os estilos globais
 import TaskList from './components/TaskList';
 import PomodoroTimer from './components/PomodoroTimer';
+import Header from './components/Header'
 
 function App() {
   return (
     <main className="dashboard">
-      {/* Futuramente aqui entrará o Header */}
+      <Header/>
       <div className="main-content">
         <TaskList />
         <div className="right-panel">
