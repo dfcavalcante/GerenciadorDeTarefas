@@ -1,16 +1,19 @@
-import React, { useState, useContext } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Paper, Container, Icon } from '@mui/material';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 const Login = () =>{
+
+    const navigate = useNavigate();
     return(
     <Box component="section" maxWidth="xs" sx={{ 
       backgroundImage: 'url(/images/madeira.jpg)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
-     }}>
+    }}>
+
       <Container component="main" maxWidth="xs" sx={{
       minHeight: '100vh',
       display: 'flex',

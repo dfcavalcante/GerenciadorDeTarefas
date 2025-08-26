@@ -1,10 +1,13 @@
 // src/components/TaskItem.jsx
 import React from 'react';
-import { Box, Typography, Checkbox } from '@mui/material';
+import { Box, Typography, Checkbox, Button } from '@mui/material';
 import { RadioButtonUnchecked, CheckCircle } from '@mui/icons-material';
+import Task from './Task';
+import { useNavigate } from 'react-router-dom';
 
 // 1. Recebemos as novas props: id e onToggle
 function TaskItem({ id, title, subtitle, completed, onToggle }) {
+
   return (
     <Box
       sx={{
@@ -48,6 +51,7 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
         <Typography variant="body2" color="textSecondary">
           {subtitle}
         </Typography>
+
       </Box>
     </Box>
   );

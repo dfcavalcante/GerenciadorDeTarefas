@@ -22,7 +22,7 @@ function App() {
             <PomodoroTimer />
             {/* Por enquanto, vamos deixar o gráfico como um placeholder */}
             <Box sx={{ mt: 4 }}> 
-               <ProductivityChart />
+              <ProductivityChart />
             </Box>
           </Box>
         </Box>
