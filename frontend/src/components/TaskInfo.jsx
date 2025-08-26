@@ -4,8 +4,6 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import {useState} from 'react';
 import { DoneAll } from "@mui/icons-material";
 
-//toast pra notificar mudancas no form
-
 //Essa página vai ser tipo a parte mais detalhada da task
 //pro mano q usar poder modificar o nome, tempo, status, vencimento etc
 const Task = () =>{

@@ -8,6 +8,8 @@ import { Box, Container } from '@mui/material';
 import './App.css'; // Importa o nosso CSS customizado
 
 function App() {
+  //seria bom mover isso pra um page Home ou algo assim
+  //ja q vai ter as rotas dps
   return (
     <div className="app-container">
       <Header />

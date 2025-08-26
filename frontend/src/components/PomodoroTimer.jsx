@@ -4,13 +4,30 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 
-const tempoInicial = 25 * 60;
+const tempoInicialPomodoro = 25 * 60;
+const tempoInicialCurto = 5 * 60;
+const tempoInicialLongo = 15 * 60;
 
 const PomodoroTimer = () => {
   //n tenho ctz se isso é pra se comunicar com o backend
   //por enquanto fica assim eu acho
-  const [tempoSobrando, setTempoSobrando] = useState(tempoInicial); 
+  const [tempoSobrando, setTempoSobrando] = useState(tempoInicialPomodoro); 
   const [isRunning, setIsRunning] = useState(false);
+
+  //selecionar qual botao vai ficar marcado
+  const [selected, setSelected] = useState('pomodoro');
+
+  // Atualiza o tempo inicial quando o botão selecionado mudar
+  useEffect(() => {
+    if (selected === 'pomodoro') {
+      setTempoSobrando(tempoInicialPomodoro);
+    } else if (selected === 'curto') {
+      setTempoSobrando(tempoInicialCurto);
+    } else if (selected === 'longo') {
+      setTempoSobrando(tempoInicialLongo);
+    }
+    setIsRunning(false); // pausa o timer ao mudar o modo
+  }, [selected]);
 
   // aq q roda o timer
   useEffect(() => {
@@ -45,19 +62,46 @@ const PomodoroTimer = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: "300px",
+        width: 'auto',
         mx: "auto"
       }}
     > 
-      <Typography sx={{ color:'black', fontSize:'30px', mb: 2, fontStyle:"initial"}}>
-        Pomodoro
-      </Typography>
+      <Box sx={{ display: 'flex', gap: 2 , padding:'20px'}}>
+        <Button
+          variant={selected === 'pomodoro' ? 'contained' : 'outlined'}
+          onClick={() => setSelected('pomodoro')}
+        >
+          Pomodoro
+        </Button>
+
+        <Button 
+          variant={selected === 'curto' ? 'contained' : 'outlined'}
+          onClick={() => setSelected('curto')}
+        >
+          <Box sx={{width: '100%', textAlign: 'center' }}>
+            Short Break
+          </Box>
+        </Button>
+
+        <Button 
+          variant={selected === 'longo' ? 'contained' : 'outlined'}
+          onClick={() => setSelected('longo')}
+        >
+          <Box sx={{  width: '100%', textAlign: 'center' }}>
+            Long Break
+          </Box>
+        </Button>
+      </Box>
 
       {/*se achar melhor sem o ngc do circulo, é so tirar esse box*/}
       <Box sx={{ width: 200, height: 200, mb: 3 }}>
         <CircularProgressbar
-          value={tempoInicial - tempoSobrando}
-          maxValue={tempoInicial}
+          value={(selected === 'pomodoro' ? tempoInicialPomodoro :
+                  selected === 'curto' ? tempoInicialCurto :
+                  tempoInicialLongo) - tempoSobrando}
+          maxValue={selected === 'pomodoro' ? tempoInicialPomodoro :
+                    selected === 'curto' ? tempoInicialCurto :
+                    tempoInicialLongo}
           text={formatTime(tempoSobrando)}
           styles={buildStyles({
             textColor: "black",
@@ -82,7 +126,9 @@ const PomodoroTimer = () => {
           variant='outlined' 
           onClick={() => {
             setIsRunning(false);
-            setTempoSobrando(tempoInicial); // resetar
+            if (selected === 'pomodoro') setTempoSobrando(tempoInicialPomodoro);
+            else if (selected === 'curto') setTempoSobrando(tempoInicialCurto);
+            else setTempoSobrando(tempoInicialLongo);
           }}
         >
           Resetar

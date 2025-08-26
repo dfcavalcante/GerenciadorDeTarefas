@@ -1,7 +1,8 @@
 // src/components/TaskList.jsx
 import React, { useState } from 'react'; // 1. Importamos o useState
 import TaskItem from './TaskItem';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const mockTasks = [
   { id: 1, title: 'Dask In', subtitle: 'Ompeler', completed: false },
@@ -38,13 +39,34 @@ function TaskList() {
         backgroundColor: 'white', 
         borderRadius: 3, 
         boxShadow: 3,
-        width: '350px'
+        width: '350px',
+        
       }}
     >
-      <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
+      <Typography variant="h5" sx={{ mb: 2, color:'black' }}>
         Tasks
       </Typography>
       
+      {/*Aq é a box para adicionar mais tasks*/}
+      <Box sx={{ 
+        display: 'flex',
+        alignItems: 'center',
+        p: 1.5,
+        mb: 1.5,
+        borderRadius: 2,
+        border: '1px solid #eee',
+        transition: 'background-color 0.3s',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#f5f5f5'
+        }
+      }}>
+        <Button>
+          <AddCircleIcon sx={{paddingRight:'3px'}}/>
+          Adicionar Task
+        </Button>
+      </Box>
+
       <Box>
         {tasks.map(task => (
           <TaskItem

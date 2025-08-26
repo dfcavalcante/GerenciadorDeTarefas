@@ -2,8 +2,7 @@
 import React from 'react';
 import { Box, Typography, Checkbox, Button } from '@mui/material';
 import { RadioButtonUnchecked, CheckCircle } from '@mui/icons-material';
-import Task from './Task';
-import { useNavigate } from 'react-router-dom';
+import Task from './TaskInfo';
 
 // 1. Recebemos as novas props: id e onToggle
 function TaskItem({ id, title, subtitle, completed, onToggle }) {
@@ -53,6 +52,7 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
         </Typography>
 
       </Box>
+
     </Box>
   );
 }
