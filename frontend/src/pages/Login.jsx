@@ -1,25 +1,17 @@
-
 import { useNavigate } from 'react-router-dom';
-import { Box, TextField, Button, Typography, Paper, Container, Icon } from '@mui/material';
+import { Box,Container, TextField, Button, Typography, Paper } from '@mui/material';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
-const Login = () =>{
+const Login = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-
-    //ele n fica no meio de jeito nenhum D:
-    return(
-    <Box sx={{
-        minHeight: '100vh',              
-        display: 'flex',                 
-        alignItems: 'center',            
-        justifyContent: 'center',        
+  return (
+  <Box component="section" maxWidth="xs" sx={{ 
+        backgroundColor: '#f0f2f5',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        p: 2,                            
-    }}>
-
+      }}>
       <Container component="main" maxWidth="xs" sx={{
       minHeight: '100vh',
       display: 'flex',
@@ -41,7 +33,7 @@ const Login = () =>{
           <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 1, mb: 3 }}>
             Faça login para acessar o sistema
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box component="form"  noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -62,6 +54,7 @@ const Login = () =>{
               type="password"
               id="password"
               autoComplete="current-password"
+          
             />
             <Button
               type="submit"
@@ -73,26 +66,10 @@ const Login = () =>{
               Entrar
             </Button>
           </Box>
-
-        <Box sx={{ 
-          display: 'flex',        
-          justifyContent: 'space-between',
-          alignItems: 'center', 
-          backgroundColor:'primary',
-          variant:"outlined"
-        }}>
-          <Typography variant="body2" color="text.secondary"> Ainda não tem cadastro? </Typography>
-
-          {/*dps usa o onclick navigate pra pagina de cadastro aqui*/}
-          <Button>
-            Cadastre-se
-          </Button>
-        </Box>
-
         </Paper>
-        </Container>
+    </Container>
     </Box>
-    );
-}
+  );
+};
 
 export default Login;

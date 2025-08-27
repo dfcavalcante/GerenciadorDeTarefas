@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Box, Stack, Typography, FormControl, TextField, Button } from "@mui/material";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem } from "@mui/material";
 import { useState } from "react";
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+
 
 //adicionar as Tasks
 const TaskAdd = ({open, onClose}) =>{
@@ -10,7 +12,8 @@ const TaskAdd = ({open, onClose}) =>{
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        priority: "Normal"
+        priority: "Normal",
+        date:"",
     });
 
     //salvar as mudancas
@@ -31,6 +34,14 @@ const TaskAdd = ({open, onClose}) =>{
     return(
         <Dialog open={open} onClose={onClose}> 
             <DialogContent>
+                <Button
+                    variant="outlined"
+                    startIcon={<KeyboardReturnIcon />}
+                    onClick={onClose}
+                    sx={{ mb: 3 }}
+                >
+                    Retornar 
+                </Button>
                 <Typography variant="h5" sx={{padding:'10px'}}>
                     Adicionar tarefa
                 </Typography>
@@ -44,6 +55,7 @@ const TaskAdd = ({open, onClose}) =>{
                             value={formData.priority}
                             onChange={handleChange}
                             select
+                            sx={{ mb: 2 }}
                             fullWidth
                         >
                             <MenuItem value="Baixa">Baixa</MenuItem>
@@ -51,18 +63,20 @@ const TaskAdd = ({open, onClose}) =>{
                             <MenuItem value="Alta">Alta</MenuItem>
                         </TextField>
 
+                        <TextField name="date" label="Data de validade" value={formData.date} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
+
                     </FormControl>
                 </Stack>
 
-                <DialogActions sx={{ pr: 5, pb: 1, pt:3 }}>
+                <Box sx={{ display: 'flex', gap: '12px' }}>
                     <Button onClick={handleSave} variant="contained" color="primary">
-                        Adicionar
+                        Adicionar tarefa
                     </Button>
-                    <Button onClick={onClose} color="inherit">
+                    <Button onClick={onClose}  color="error" variant="contained" >
                         Cancelar
                     </Button>
                     
-                </DialogActions>
+                </Box>
 
             </DialogContent>
         </Dialog>

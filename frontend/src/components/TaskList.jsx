@@ -8,9 +8,9 @@ import TaskAdd from './TaskAdd';
 
 const mockTasks = [
   { id: 1, title: 'Dask In', subtitle: 'Ompeler', completed: false },
-  { id: 2, title: 'Bick Destnake', subtitle: 'Ompeler', completed: true },
+  { id: 2, title: 'Bick Destnake', subtitle: 'Ompeler', completed: false },
   { id: 3, title: 'Weh Fvist', subtitle: 'Ompeler', completed: false },
-  { id: 4, title: 'Cack Tist', subtitle: 'Ompeler', completed: true },
+  { id: 4, title: 'Cack Tist', subtitle: 'Ompeler', completed: false },
   { id: 5, title: 'Aital Crich', subtitle: 'Ompeler', completed: false },
   { id: 6, title: 'Sewint', subtitle: 'Ompeler', completed: false },
 ];

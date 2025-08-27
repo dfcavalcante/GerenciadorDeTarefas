@@ -1,12 +1,15 @@
 // src/components/TaskItem.jsx
 import React from 'react';
-import { Box, Typography, Checkbox, Button } from '@mui/material';
+import { useState } from 'react';
+import { Box, Typography, Checkbox, Button, IconButton } from '@mui/material';
 import { RadioButtonUnchecked, CheckCircle } from '@mui/icons-material';
-import Task from './TaskInfo';
+import TaskInfo from './TaskInfo';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 // 1. Recebemos as novas props: id e onToggle
 function TaskItem({ id, title, subtitle, completed, onToggle }) {
+  //abrir e fechar o taskInfo
+  const [openInfo, setOpenInfo] = useState(false);
 
   return (
     <Box
@@ -26,7 +29,6 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
           backgroundColor: '#f5f5f5'
         }
       }}
-      onClick={() => onToggle(id)}
     >
       {/* Esquerda: Checkbox + texto */}
       <Box sx={{ display: 'flex', alignItems: 'center', flex:1 }}>
@@ -55,12 +57,22 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
       </Box>
 
       {/* Esse botão é para levar ao taskInfo*/}
-      <Button  
-        size="small"     
-        sx={{ p: 0, ml: 1 }} 
+       <IconButton
+        onClick={(e) => {
+          e.stopPropagation(); // evita que o clique marque/desmarque a tarefa
+          setOpenInfo(true);  
+        }}
       >
-        <MoreVertIcon  fontSize='small'/>
-      </Button>
+        <MoreVertIcon />
+      </IconButton>
+
+      <TaskInfo
+        onClick={() => setOpen(true)}
+        open={openInfo}
+        onClose={() => setOpenInfo(false)}
+        task={{ id, title, subtitle, completed }}
+      />
+
     </Box>
   );
 }

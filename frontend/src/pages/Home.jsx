@@ -6,26 +6,41 @@ import ProductivityChart from '../components/ProductivityChart'; // Vamos import
 import { Box, Container } from '@mui/material'
 
 const Home = () =>{
+    //dados feike por enquanto
+  const productivityData = {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        datasets: [
+          {
+            label: 'Hours Focused',
+            data: [6, 7.5, 5, 8, 7],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+          },
+        ],
+      };
     return(
-    <div className="app-container">
-    <Header />
-      <Container  sx={{ mt: '150px' }}> 
-        
-
-        <Box className="main-content">
-          {/* Lado Esquerdo */}
-          <TaskList />
+    <div className='body-home'>
+      <div className="app-container">
+      <Header />
+        <Container  sx={{ mt: '150px' }}> 
           
-          {/* Lado Direito */}
-          <Box className="right-panel">
-            <PomodoroTimer />
-            {/* Por enquanto, vamos deixar o gráfico como um placeholder */}
-            <Box sx={{ mt: 4 }}> 
-              <ProductivityChart />
+
+          <Box className="main-content">
+            {/* Lado Esquerdo */}
+            <TaskList />
+            
+            {/* Lado Direito */}
+            <Box className="right-panel">
+              <PomodoroTimer />
+              {/* Por enquanto, vamos deixar o gráfico como um placeholder */}
+              <Box sx={{ mt: 4 }}> 
+                <ProductivityChart data={productivityData} />
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </div>
     </div>
     );
 }
