@@ -1,11 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
-
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
 
+  
   return(
       <AppBar position="fixed"  sx={{
       height: 120,
@@ -41,7 +42,7 @@ const Header = () => {
 
         {/* Botões de navegação */}
         <Box sx={{ display: 'flex', gap: 3 }}>
-          <IconButton>
+          <IconButton  onClick={() => navigate('/login')}>
               <AccountCircleIcon  sx = {{fontSize: '50px'}} />
           </IconButton>
 

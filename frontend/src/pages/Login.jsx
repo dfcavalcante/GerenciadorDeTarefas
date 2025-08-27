@@ -6,12 +6,18 @@ import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 const Login = () =>{
 
     const navigate = useNavigate();
+
+    //ele n fica no meio de jeito nenhum D:
     return(
-    <Box component="section" maxWidth="xs" sx={{ 
-      backgroundImage: 'url(/images/madeira.jpg)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
+    <Box sx={{
+        minHeight: '100vh',              
+        display: 'flex',                 
+        alignItems: 'center',            
+        justifyContent: 'center',        
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        p: 2,                            
     }}>
 
       <Container component="main" maxWidth="xs" sx={{
@@ -67,6 +73,22 @@ const Login = () =>{
               Entrar
             </Button>
           </Box>
+
+        <Box sx={{ 
+          display: 'flex',        
+          justifyContent: 'space-between',
+          alignItems: 'center', 
+          backgroundColor:'primary',
+          variant:"outlined"
+        }}>
+          <Typography variant="body2" color="text.secondary"> Ainda não tem cadastro? </Typography>
+
+          {/*dps usa o onclick navigate pra pagina de cadastro aqui*/}
+          <Button>
+            Cadastre-se
+          </Button>
+        </Box>
+
         </Paper>
         </Container>
     </Box>
