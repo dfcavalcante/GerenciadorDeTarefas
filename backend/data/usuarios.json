@@ -1,0 +1,7 @@
+[
+  {
+    "id": 1,
+    "username": "meu-primeiro-usuario",
+    "password_hash": "scrypt:32768:8:1$xAxBhhoYhi38CGos$49195d68f47faf107383bca8ecd020030cd1089d24a48590ad93c07e1ba8258a0d853276acef07b3afa51551ee3179d9114614fffedd55515ce83ccd7ce2cf43"
+  }
+]

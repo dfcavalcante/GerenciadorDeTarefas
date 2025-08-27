@@ -1,11 +1,7 @@
 import json
 import os
 
-# Constrói o caminho para o arquivo de dados de forma segura e que funciona em qualquer sistema operacional
-# __file__ se refere a este arquivo (gerenciador_tarefas.py)
-# os.path.dirname(__file__) se refere à pasta 'services'
-# '..' sobe um nível para a pasta 'backend'
-# E então entra em 'data/tarefas.json'
+# Constrói o caminho para o arquivo de dados de forma segura
 CAMINHO_ARQUIVO = os.path.join(os.path.dirname(__file__), '..', 'data', 'tarefas.json')
 
 def _carregar_tarefas():
@@ -38,22 +34,29 @@ def obter_tarefa_por_id(tarefa_id):
     return None # Retorna None se não encontrar a tarefa
 
 def adicionar_tarefa(dados_nova_tarefa):
-    """Adiciona uma nova tarefa à lista."""
+    """Adiciona uma nova tarefa à lista, incluindo os novos campos."""
     tarefas = _carregar_tarefas()
 
     # Gera um novo ID para a tarefa
     novo_id = max([t['id'] for t in tarefas]) + 1 if tarefas else 1
 
+    # Cria o dicionário completo da nova tarefa
     nova_tarefa = {
         'id': novo_id,
         'titulo': dados_nova_tarefa['titulo'],
         'status': 'pendente', # Status padrão para novas tarefas
-        'tempo_pomodoro_minutos': int(dados_nova_tarefa['tempo_pomodoro_minutos'])
+        'tempo_pomodoro_minutos': int(dados_nova_tarefa['tempo_pomodoro_minutos']),
+        
+        # --- LÓGICA ATUALIZADA AQUI ---
+        # Usamos .get() para fornecer valores padrão caso os campos não sejam enviados na requisição
+        'prioridade': dados_nova_tarefa.get('prioridade', 'media'),
+        'data_de_vencimento': dados_nova_tarefa.get('data_de_vencimento', None) # Pode ser nulo
     }
     
     tarefas.append(nova_tarefa)
     _salvar_tarefas(tarefas)
     
+    # Retorna o dicionário completo da tarefa que foi criada
     return nova_tarefa
 
 def atualizar_tarefa(tarefa_id, dados_atualizacao):

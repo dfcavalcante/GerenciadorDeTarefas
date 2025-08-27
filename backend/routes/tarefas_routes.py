@@ -1,6 +1,7 @@
 # /backend/routes/tarefas_routes.py
 
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from services.gerenciador_tarefas import (
     obter_todas_as_tarefas,
     obter_tarefa_por_id,
@@ -14,12 +15,14 @@ tarefas_bp = Blueprint('tarefas_routes', __name__)
 
 # Rota para LISTAR todas as tarefas
 @tarefas_bp.route('/tarefas', methods=['GET'])
+@jwt_required()
 def get_tarefas():
     tarefas = obter_todas_as_tarefas()
     return jsonify(tarefas)
 
 # Rota para OBTER uma tarefa específica por ID
 @tarefas_bp.route('/tarefas/<int:tarefa_id>', methods=['GET'])
+@jwt_required()
 def get_tarefa(tarefa_id):
     tarefa = obter_tarefa_por_id(tarefa_id)
     if tarefa:
@@ -28,6 +31,7 @@ def get_tarefa(tarefa_id):
 
 # Rota para CRIAR uma nova tarefa
 @tarefas_bp.route('/tarefas', methods=['POST'])
+@jwt_required()
 def create_tarefa():
     dados = request.get_json()
     # Validação simples para garantir que os dados necessários foram enviados
@@ -39,6 +43,7 @@ def create_tarefa():
 
 # Rota para ATUALIZAR uma tarefa existente (ex: mudar o status)
 @tarefas_bp.route('/tarefas/<int:tarefa_id>', methods=['PUT'])
+@jwt_required()
 def update_tarefa(tarefa_id):
     dados = request.get_json()
     tarefa_atualizada = atualizar_tarefa(tarefa_id, dados)
@@ -48,6 +53,7 @@ def update_tarefa(tarefa_id):
 
 # Rota para DELETAR uma tarefa
 @tarefas_bp.route('/tarefas/<int:tarefa_id>', methods=['DELETE'])
+@jwt_required()
 def delete_tarefa(tarefa_id):
     sucesso = deletar_tarefa(tarefa_id)
     if sucesso:
