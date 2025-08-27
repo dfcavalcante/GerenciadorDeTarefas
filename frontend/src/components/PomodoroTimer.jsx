@@ -9,8 +9,7 @@ const tempoInicialCurto = 5 * 60;
 const tempoInicialLongo = 15 * 60;
 
 const PomodoroTimer = () => {
-  //n tenho ctz se isso é pra se comunicar com o backend
-  //por enquanto fica assim eu acho
+
   const [tempoSobrando, setTempoSobrando] = useState(tempoInicialPomodoro); 
   const [isRunning, setIsRunning] = useState(false);
 
@@ -66,7 +65,7 @@ const PomodoroTimer = () => {
         mx: "auto"
       }}
     > 
-      <Box sx={{ display: 'flex', gap: 2 , padding:'20px'}}>
+      <Box sx={{ display: 'flex', gap: 2, paddingBottom:'20px'}}>
         <Button
           variant={selected === 'pomodoro' ? 'contained' : 'outlined'}
           onClick={() => setSelected('pomodoro')}

@@ -3,6 +3,8 @@ import React, { useState } from 'react'; // 1. Importamos o useState
 import TaskItem from './TaskItem';
 import { Box, Typography, Button } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { useNavigate } from 'react-router-dom';
+import TaskAdd from './TaskAdd';
 
 const mockTasks = [
   { id: 1, title: 'Dask In', subtitle: 'Ompeler', completed: false },
@@ -16,6 +18,10 @@ const mockTasks = [
 function TaskList() {
   // 2. Usamos useState para tornar a lista de tarefas um "estado" dinâmico
   const [tasks, setTasks] = useState(mockTasks);
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+
 
   // 3. Criamos a função que vai lidar com o clique no checkbox
   const handleToggleTask = (taskId) => {
@@ -48,24 +54,30 @@ function TaskList() {
       </Typography>
       
       {/*Aq é a box para adicionar mais tasks*/}
-      <Box sx={{ 
-        display: 'flex',
-        alignItems: 'center',
-        p: 1.5,
-        mb: 1.5,
-        borderRadius: 2,
-        border: '1px solid #eee',
-        transition: 'background-color 0.3s',
-        cursor: 'pointer',
-        '&:hover': {
+      <Button
+        fullWidth
+        onClick={() => setOpen(true)}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          p: 1.5,
+          mb: 1.5,
+          borderRadius: 2,
+          border: '1px dashed #aaa',  
+          transition: 'background-color 0.3s',
+          cursor: 'pointer',
+          textTransform: 'none', 
+          '&:hover': {
             backgroundColor: '#f5f5f5'
-        }
-      }}>
-        <Button>
-          <AddCircleIcon sx={{paddingRight:'3px'}}/>
-          Adicionar Task
-        </Button>
-      </Box>
+          }
+        }}
+      >
+        <AddCircleIcon sx={{ paddingRight: '6px' }} />
+        Adicionar Task
+      </Button>
+
+        
+      <TaskAdd open={open} onClose={() => setOpen(false)} />
 
       <Box>
         {tasks.map(task => (

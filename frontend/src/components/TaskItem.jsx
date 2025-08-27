@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Typography, Checkbox, Button } from '@mui/material';
 import { RadioButtonUnchecked, CheckCircle } from '@mui/icons-material';
 import Task from './TaskInfo';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 // 1. Recebemos as novas props: id e onToggle
 function TaskItem({ id, title, subtitle, completed, onToggle }) {
@@ -12,6 +13,7 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
       sx={{
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between',
         p: 1.5,
         mb: 1.5,
         backgroundColor: completed ? '#f0f4f8' : '#fafafa',
@@ -19,40 +21,46 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
         border: '1px solid #eee',
         transition: 'background-color 0.3s',
         opacity: completed ? 0.7 : 1,
-        cursor: 'pointer', // Adiciona o cursor de "clicável"
+        cursor: 'pointer',
         '&:hover': {
-            backgroundColor: '#f5f5f5'
+          backgroundColor: '#f5f5f5'
         }
       }}
-      // 2. Adicionamos um onClick no Box inteiro para facilitar
       onClick={() => onToggle(id)}
     >
-      <Checkbox
-        checked={completed}
-        // 3. O onChange aqui também chama a função, passando o id da tarefa "para cima"
-        onChange={() => onToggle(id)}
-        icon={<RadioButtonUnchecked />}
-        checkedIcon={<CheckCircle />}
-        sx={{ mr: 1.5 }}
-      />
-      
-      <Box>
-        <Typography 
-          variant="body1" 
-          sx={{ 
-            fontWeight: '500',
-            textDecoration: completed ? 'line-through' : 'none',
-            color: completed ? '#757575' : '#212121',
-          }}
-        >
-          {title}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {subtitle}
-        </Typography>
-
+      {/* Esquerda: Checkbox + texto */}
+      <Box sx={{ display: 'flex', alignItems: 'center', flex:1 }}>
+        <Checkbox
+          checked={completed}
+          onChange={() => onToggle(id)}
+          icon={<RadioButtonUnchecked />}
+          checkedIcon={<CheckCircle />}
+          sx={{ mr: 1.5 }}
+        />
+        <Box>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              fontWeight: '500',
+              textDecoration: completed ? 'line-through' : 'none',
+              color: completed ? '#757575' : '#212121',
+            }}
+          >
+            {title}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {subtitle}
+          </Typography>
+        </Box>
       </Box>
 
+      {/* Esse botão é para levar ao taskInfo*/}
+      <Button  
+        size="small"     
+        sx={{ p: 0, ml: 1 }} 
+      >
+        <MoreVertIcon  fontSize='small'/>
+      </Button>
     </Box>
   );
 }

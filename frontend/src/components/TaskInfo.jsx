@@ -6,7 +6,7 @@ import { DoneAll } from "@mui/icons-material";
 
 //Essa página vai ser tipo a parte mais detalhada da task
 //pro mano q usar poder modificar o nome, tempo, status, vencimento etc
-const Task = () =>{
+const TaskInfo = () =>{
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -45,4 +45,4 @@ const Task = () =>{
     );
 }
 
-export default Task;
+export default TaskInfo;
