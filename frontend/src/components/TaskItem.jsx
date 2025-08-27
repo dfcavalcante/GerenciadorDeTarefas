@@ -57,7 +57,7 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
       </Box>
 
       {/* Esse botão é para levar ao taskInfo*/}
-       <IconButton
+      <IconButton
         onClick={(e) => {
           e.stopPropagation(); // evita que o clique marque/desmarque a tarefa
           setOpenInfo(true);  
@@ -67,7 +67,7 @@ function TaskItem({ id, title, subtitle, completed, onToggle }) {
       </IconButton>
 
       <TaskInfo
-        onClick={() => setOpen(true)}
+        onClick={() => setOpenInfo(true)}
         open={openInfo}
         onClose={() => setOpenInfo(false)}
         task={{ id, title, subtitle, completed }}
