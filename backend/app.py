@@ -18,4 +18,4 @@ app.register_blueprint(tarefas_bp, url_prefix='/api')
 app.register_blueprint(auth_bp, url_prefix='/api/auth') # NOVO!
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5000)

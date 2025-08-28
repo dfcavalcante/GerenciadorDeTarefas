@@ -10,7 +10,7 @@
   {
     "id": 2,
     "titulo": "Criar a API de tarefas com Flask",
-    "status": "em_andamento",
+    "status": "pendente",
     "tempo_pomodoro_minutos": 50,
     "prioridade": "alta",
     "data_de_vencimento": "2025-08-28"

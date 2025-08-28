@@ -1,80 +1,55 @@
 // src/components/TaskItem.jsx
-import React from 'react';
-import { useState } from 'react';
-import { Box, Typography, Checkbox, Button, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Checkbox, IconButton } from '@mui/material';
 import { RadioButtonUnchecked, CheckCircle } from '@mui/icons-material';
 import TaskInfo from './TaskInfo';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-// 1. Recebemos as novas props: id e onToggle
-function TaskItem({ id, title, subtitle, completed, onToggle }) {
-  //abrir e fechar o taskInfo
-  const [openInfo, setOpenInfo] = useState(false);
+// ALTERAÇÃO: Recebemos o objeto 'task' inteiro e as novas funções onUpdate e onDelete
+function TaskItem({ task, onToggle, onUpdate, onDelete }) {
+    //abrir e fechar o taskInfo
+    const [openInfo, setOpenInfo] = useState(false);
 
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        p: 1.5,
-        mb: 1.5,
-        backgroundColor: completed ? '#f0f4f8' : '#fafafa',
-        borderRadius: 2,
-        border: '1px solid #eee',
-        transition: 'background-color 0.3s',
-        opacity: completed ? 0.7 : 1,
-        cursor: 'pointer',
-        '&:hover': {
-          backgroundColor: '#f5f5f5'
-        }
-      }}
-    >
-      {/* Esquerda: Checkbox + texto */}
-      <Box sx={{ display: 'flex', alignItems: 'center', flex:1 }}>
-        <Checkbox
-          checked={completed}
-          onChange={() => onToggle(id)}
-          icon={<RadioButtonUnchecked />}
-          checkedIcon={<CheckCircle />}
-          sx={{ mr: 1.5 }}
-        />
-        <Box>
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              fontWeight: '500',
-              textDecoration: completed ? 'line-through' : 'none',
-              color: completed ? '#757575' : '#212121',
-            }}
-          >
-            {title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            {subtitle}
-          </Typography>
+    return (
+        <Box sx={{ /* ... seus estilos ... */ }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                <Checkbox
+                    checked={task.status === 'concluida'} // ALTERAÇÃO: Usa task.status
+                    onChange={onToggle} // onToggle continua igual
+                    icon={<RadioButtonUnchecked />}
+                    checkedIcon={<CheckCircle />}
+                    sx={{ mr: 1.5 }}
+                />
+                <Box>
+                    <Typography variant="body1" sx={{ /* ... seus estilos ... */ }}>
+                        {task.titulo}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        {`Prioridade: ${task.prioridade}`} 
+                    </Typography>
+                </Box>
+            </Box>
+
+            {/* Esse botão é para levar ao taskInfo*/}
+            <IconButton
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenInfo(true);
+                }}
+            >
+                <MoreVertIcon />
+            </IconButton>
+
+            {/* ALTERAÇÃO: Passamos a tarefa e as funções para o TaskInfo */}
+            <TaskInfo
+                open={openInfo}
+                onClose={() => setOpenInfo(false)}
+                task={task}
+                onSave={onUpdate}
+                onDelete={onDelete}
+            />
         </Box>
-      </Box>
-
-      {/* Esse botão é para levar ao taskInfo*/}
-      <IconButton
-        onClick={(e) => {
-          e.stopPropagation(); // evita que o clique marque/desmarque a tarefa
-          setOpenInfo(true);  
-        }}
-      >
-        <MoreVertIcon />
-      </IconButton>
-
-      <TaskInfo
-        onClick={() => setOpenInfo(true)}
-        open={openInfo}
-        onClose={() => setOpenInfo(false)}
-        task={{ id, title, subtitle, completed }}
-      />
-
-    </Box>
-  );
+    );
 }
 
 export default TaskItem;
