@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // ALTERAÇÃO: Importamos o Link
 import { Box, Container, TextField, Button, Typography, Paper, Alert } from '@mui/material';
-// O ícone KeyboardReturnIcon não é mais necessário
-// import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn'; 
 
 const Login = () => {
     const navigate = useNavigate();
@@ -53,8 +51,6 @@ const Login = () => {
 
                 <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
                     
-                    {/* O BOTÃO "RETORNAR" FOI REMOVIDO DESTA ÁREA */}
-                    
                     <Typography component="h1" variant="h5" align="center" sx={{ mb: 1 }}>
                         Login
                     </Typography>
@@ -100,6 +96,17 @@ const Login = () => {
                         >
                             Entrar
                         </Button>
+
+                        {/* ALTERAÇÃO: Adicionamos o link para a página de cadastro aqui */}
+                        <Box textAlign="center">
+                            <Typography variant="body2">
+                                Não tem uma conta?{' '}
+                                <Link to="/cadastro" style={{ color: 'inherit' }}>
+                                    Cadastre-se
+                                </Link>
+                            </Typography>
+                        </Box>
+
                     </Box>
                 </Paper>
             </Container>
