@@ -10,11 +10,6 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 const TaskItem = ({ task, onToggle, onDelete, onUpdate, onSelect, isActive }) => {
     const [openInfo, setOpenInfo] = useState(false);
 
-    const handleToggleStatus = () => {
-        const newStatus = task.status === 'concluida' ? 'pendente' : 'concluida';
-        onUpdate(task.id, { status: newStatus });
-    };
-
     return (
         <Box
             sx={{
@@ -23,7 +18,7 @@ const TaskItem = ({ task, onToggle, onDelete, onUpdate, onSelect, isActive }) =>
                 justifyContent: 'space-between',
                 p: 1.5,
                 mb: 1.5,
-                backgroundColor: task.status === 'concluida' ? '#f0f4f8' : '#fafafa',
+                backgroundColor: task.status === 'concluida' ? '#f0f4f8' : 'white',
                 borderRadius: 2,
                 border: isActive ? '2px solid #1976d2' : '1px solid #eee',
                 transition: 'all 0.2s',
@@ -33,7 +28,7 @@ const TaskItem = ({ task, onToggle, onDelete, onUpdate, onSelect, isActive }) =>
             <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                 <Checkbox
                     checked={task.status === 'concluida'}
-                    onChange={handleToggleStatus}
+                    onChange={onToggle}
                     icon={<RadioButtonUnchecked />}
                     checkedIcon={<CheckCircle />}
                     sx={{ mr: 1.5 }}
@@ -49,9 +44,12 @@ const TaskItem = ({ task, onToggle, onDelete, onUpdate, onSelect, isActive }) =>
                     >
                         {task.titulo}
                     </Typography>
+                    
+                    {/* --- CORREÇÃO AQUI --- */}
                     <Typography variant="body2" color="textSecondary">
                         {`Prioridade: ${task.prioridade} | Pomodoros: ${task.pomodoros_concluidos || 0}`}
                     </Typography>
+
                 </Box>
             </Box>
 

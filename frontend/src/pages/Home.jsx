@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; // 1. Importe o useCallback
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -14,8 +14,6 @@ const Home = () => {
     const [error, setError] = useState('');
     const [activeTask, setActiveTask] = useState(null);
 
-    // 2. Envolvemos a função fetchTarefas com o useCallback
-    // Isso cria uma versão "memorizada" da função que não é recriada a cada renderização.
     const fetchTarefas = useCallback(async () => {
         const token = localStorage.getItem('accessToken');
         if (!token) {
@@ -37,36 +35,71 @@ const Home = () => {
         } finally {
             setLoading(false);
         }
-    }, [navigate]); // O navigate é uma dependência estável
+    }, [navigate]);
 
-    // 3. O useEffect agora depende da função memorizada, e só vai rodar uma vez.
     useEffect(() => {
         fetchTarefas();
     }, [fetchTarefas]);
 
-    const handlePomodoroComplete = async () => {
-        if (!activeTask) return;
+    const handleAddTask = async (formData) => {
         const token = localStorage.getItem('accessToken');
-        const updatedPomodoros = (activeTask.pomodoros_concluidos || 0) + 1;
+        const newTask = {
+            titulo: formData.title,
+            prioridade: formData.priority.toLowerCase(),
+            data_de_vencimento: formData.date,
+            tempo_pomodoro_minutos: 25
+        };
         try {
-            await axios.put(`http://127.0.0.1:5000/api/tarefas/${activeTask.id}`,
-                { pomodoros_concluidos: updatedPomodoros },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await axios.post('http://127.0.0.1:5000/api/tarefas', newTask, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             fetchTarefas();
-            setActiveTask(null);
-            alert(`Pomodoro para a tarefa "${activeTask.titulo}" concluído!`);
         } catch (err) {
-            setError('Não foi possível registrar o pomodoro.');
+            setError('Falha ao adicionar tarefa.');
+        }
+    };
+
+    const handleDeleteTask = async (id) => {
+        const token = localStorage.getItem('accessToken');
+        try {
+            await axios.delete(`http://127.0.0.1:5000/api/tarefas/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            fetchTarefas();
+        } catch (err) {
+            setError('Falha ao deletar tarefa.');
+        }
+    };
+
+    const handleUpdateTask = async (id, formData) => {
+        const token = localStorage.getItem('accessToken');
+        const updatedData = {
+            titulo: formData.title,
+            prioridade: formData.priority.toLowerCase(),
+            data_de_vencimento: formData.date
+        };
+        try {
+            await axios.put(`http://127.0.0.1:5000/api/tarefas/${id}`, updatedData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            fetchTarefas();
+        } catch (err) {
+            setError('Falha ao editar tarefa.');
         }
     };
     
-    // ... Suas outras funções (handleAddTask, handleDeleteTask, etc.)
-    const handleLogout = () => { /* ... */ };
-    const handleAddTask = async (formData) => { /* ... */ };
-    const handleDeleteTask = async (id) => { /* ... */ };
-    const handleUpdateTask = async (id, taskData) => { /* ... */ };
-    const productivityData = { /* ... */ };
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        navigate('/login');
+    };
+    
+    const productivityData = {
+        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
+        datasets: [{
+            label: 'Horas Focadas', data: [6, 7.5, 5, 8, 7],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        }],
+    };
 
     if (loading) return <Container sx={{ display: 'flex', justifyContent: 'center', mt: '20%' }}><CircularProgress /></Container>;
     if (error) return <Container sx={{ mt: '20%' }}><Alert severity="error">{error}</Alert></Container>;
@@ -88,7 +121,6 @@ const Home = () => {
                         <Box className="right-panel">
                             <PomodoroTimer 
                                 activeTask={activeTask}
-                                onPomodoroComplete={handlePomodoroComplete} 
                             />
                             <Box sx={{ mt: 4 }}>
                                 <ProductivityChart data={productivityData} />

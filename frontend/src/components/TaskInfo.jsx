@@ -1,10 +1,7 @@
-// src/components/TaskInfo.jsx
-
 import React, { useState, useEffect } from 'react';
 import { Box, FormControl, TextField, Button, MenuItem, Dialog, DialogContent, Stack } from "@mui/material";
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
-// Recebe a tarefa e as funções de onSave e onDelete
 const TaskInfo = ({ open, onClose, task, onSave, onDelete }) => {
     const [formData, setFormData] = useState({ title: '', priority: '', date: '' });
     
@@ -12,7 +9,7 @@ const TaskInfo = ({ open, onClose, task, onSave, onDelete }) => {
         if (task) {
             setFormData({
                 title: task.titulo || '',
-                priority: task.prioridade || 'media',
+                priority: task.prioridade || 'Normal',
                 date: task.data_de_vencimento || '',
             });
         }
@@ -23,14 +20,13 @@ const TaskInfo = ({ open, onClose, task, onSave, onDelete }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // ALTERAÇÃO PRINCIPAL AQUI
     const handleSaveChanges = () => {
-        onSave(task.id, formData); // Chama a função 'handleUpdateTask' do TaskList
+        onSave(task.id, formData);
         onClose();
     };
 
     const handleDelete = () => {
-        onDelete(task.id); // Chama a função 'handleDeleteTask' do TaskList
+        onDelete(task.id);
         onClose();
     };
 
@@ -43,36 +39,18 @@ const TaskInfo = ({ open, onClose, task, onSave, onDelete }) => {
                 <Stack>
                     <FormControl>
                         <TextField name="title" label="Título" value={formData.title} onChange={handleChange} fullWidth sx={{ mb: 2 }} />
-                        <TextField
-                            name="priority"
-                            label="Prioridade"
-                            value={formData.priority}
-                            onChange={handleChange}
-                            select
-                            sx={{ mb: 2 }}
-                            fullWidth
-                        >
-                            <MenuItem value="baixa">Baixa</MenuItem>
-                            <MenuItem value="media">Média</MenuItem>
-                            <MenuItem value="alta">Alta</MenuItem>
+                        <TextField name="priority" label="Prioridade" value={formData.priority} onChange={handleChange} select sx={{ mb: 2 }} fullWidth >
+                            <MenuItem value="Baixa">Baixa</MenuItem>
+                            <MenuItem value="Normal">Normal</MenuItem>
+                            <MenuItem value="Alta">Alta</MenuItem>
                         </TextField>
-                        <TextField 
-                            name="date" 
-                            label="Data de validade" 
-                            type="date"
-                            value={formData.date} 
-                            onChange={handleChange} 
-                            fullWidth sx={{ mb: 2 }}
-                            InputLabelProps={{ shrink: true }}
-                        />
+                        <TextField name="date" label="Data de validade" type="date" value={formData.date} onChange={handleChange} fullWidth sx={{ mb: 2 }} InputLabelProps={{ shrink: true }} />
                     </FormControl>
                 </Stack>
                 <Box sx={{ display: 'flex', gap: '12px' }}>
-                    {/* O botão de Salvar agora chama a função correta */}
                     <Button onClick={handleSaveChanges} color="success" variant="contained">
                         Salvar alterações
                     </Button>
-                    {/* O botão de Remover agora chama a função correta */}
                     <Button onClick={handleDelete} color="error" variant="contained">
                         Remover
                     </Button>

@@ -1,14 +1,5 @@
 [
   {
-    "id": 1,
-    "titulo": "Configurar ambiente de desenvolvimento",
-    "status": "concluida",
-    "tempo_pomodoro_minutos": 25,
-    "prioridade": "alta",
-    "data_de_vencimento": "2025-08-27",
-    "pomodoros_concluidos": 0
-  },
-  {
     "id": 2,
     "titulo": "Criar a API de tarefas com Flask",
     "status": "em_andamento",
