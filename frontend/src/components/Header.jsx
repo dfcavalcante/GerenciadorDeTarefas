@@ -1,7 +1,6 @@
 // src/components/Header.jsx
 
 import React, { useState, useEffect } from 'react';
-// NOVO: Adicionamos Menu e MenuItem
 import { AppBar, Toolbar, Typography, IconButton, Box, Menu, MenuItem } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 import { useNavigate } from 'react-router-dom';
@@ -10,48 +9,50 @@ import { jwtDecode } from 'jwt-decode';
 const Header = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState(null);
-
-    // --- LÓGICA DO MENU ---
-    // Estado para controlar onde o menu vai aparecer
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
-    // Função para abrir o menu na posição do ícone
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    // Função para fechar o menu
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-    // --- FIM DA LÓGICA DO MENU ---
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
-                setUsername(decodedToken.nome); // Usando o campo 'nome' que definimos
+                setUsername(decodedToken.nome);
             } catch (error) {
                 console.error("Token inválido:", error);
-                handleLogout(); // Se o token for inválido, desloga
+                handleLogout();
             }
         }
     }, []);
 
     const handleLogout = () => {
-        handleMenuClose(); // Fecha o menu antes de deslogar
+        handleMenuClose();
         localStorage.removeItem('accessToken');
         navigate('/login');
     };
   
     return(
-        <AppBar position="fixed" sx={{ /* ... seus estilos ... */ }}>
+        <AppBar position="fixed" sx={{ height: 120, backgroundPosition: 'center' }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+                
                 {/* Logo e título */}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    {/* ... seu código do logo e título ... */}
+                    
+                    {/* --- A LINHA FALTANTE ESTÁ AQUI --- */}
+                    <img
+                        src="/images/pomodoro2.png"
+                        alt="Logo pomodoro"
+                        style={{ height: 100, width: 'auto', padding: '20px' }}
+                    />
+                    
                     <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', userSelect: 'none', fontSize: '40px' }}>
                         Pomodoro Timer
                     </Typography>
@@ -63,16 +64,14 @@ const Header = () => {
                         {username ? `Olá, ${username}` : ''}
                     </Typography>
                     
-                    {/* ALTERADO: O ícone agora abre o menu */}
                     <IconButton
                         color="inherit"
-                        onClick={handleMenuOpen} // Chama a função para abrir o menu
+                        onClick={handleMenuOpen}
                         title="Opções do Usuário"
                     >
                         <AccountCircleIcon sx={{ fontSize: '50px' }} />
                     </IconButton>
 
-                    {/* --- COMPONENTE DO MENU --- */}
                     <Menu
                         anchorEl={anchorEl}
                         open={isMenuOpen}
