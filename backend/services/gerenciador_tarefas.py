@@ -1,3 +1,5 @@
+# /backend/services/gerenciador_tarefas.py
+
 import json
 import os
 
@@ -34,7 +36,7 @@ def obter_tarefa_por_id(tarefa_id):
     return None # Retorna None se não encontrar a tarefa
 
 def adicionar_tarefa(dados_nova_tarefa):
-    """Adiciona uma nova tarefa à lista, incluindo os novos campos."""
+    """Adiciona uma nova tarefa à lista, incluindo todos os campos."""
     tarefas = _carregar_tarefas()
 
     # Gera um novo ID para a tarefa
@@ -46,11 +48,9 @@ def adicionar_tarefa(dados_nova_tarefa):
         'titulo': dados_nova_tarefa['titulo'],
         'status': 'pendente', # Status padrão para novas tarefas
         'tempo_pomodoro_minutos': int(dados_nova_tarefa['tempo_pomodoro_minutos']),
-        
-        # --- LÓGICA ATUALIZADA AQUI ---
-        # Usamos .get() para fornecer valores padrão caso os campos não sejam enviados na requisição
         'prioridade': dados_nova_tarefa.get('prioridade', 'media'),
-        'data_de_vencimento': dados_nova_tarefa.get('data_de_vencimento', None) # Pode ser nulo
+        'data_de_vencimento': dados_nova_tarefa.get('data_de_vencimento', None),
+        'pomodoros_concluidos': 0 # Inicializa o contador de pomodoros
     }
     
     tarefas.append(nova_tarefa)

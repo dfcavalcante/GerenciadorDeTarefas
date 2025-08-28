@@ -1,86 +1,99 @@
 // src/pages/Home.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header'
+import Header from '../components/Header';
 import TaskList from '../components/TaskList';
 import PomodoroTimer from '../components/PomodoroTimer';
 import ProductivityChart from '../components/ProductivityChart';
-import { Box, Container, CircularProgress, Alert, Button } from '@mui/material';
+import { Box, Container, CircularProgress, Alert } from '@mui/material';
 
 const Home = () => {
     const navigate = useNavigate();
-
-    // --- LÓGICA DE DADOS ADICIONADA ---
     const [tarefas, setTarefas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [activeTask, setActiveTask] = useState(null); // Estado para a tarefa ativa
 
-    useEffect(() => {
-        const fetchTarefas = async () => {
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
+    const fetchTarefas = useCallback(async () => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+        try {
+            setLoading(true);
+            const response = await axios.get('http://127.0.0.1:5000/api/tarefas', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setTarefas(response.data);
+        } catch (err) {
+            setError('Não foi possível carregar as tarefas.');
+            if (err.response && err.response.status === 401) {
+                localStorage.removeItem('accessToken');
                 navigate('/login');
-                return;
             }
-
-            try {
-                const response = await axios.get('http://127.0.0.1:5000/api/tarefas', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setTarefas(response.data);
-            } catch (err) {
-                setError('Não foi possível carregar as tarefas.');
-                if (err.response && err.response.status === 401) {
-                    localStorage.removeItem('accessToken');
-                    navigate('/login');
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTarefas();
+        } finally {
+            setLoading(false);
+        }
     }, [navigate]);
 
+    useEffect(() => {
+        fetchTarefas();
+    }, [fetchTarefas]);
+
+    const handlePomodoroComplete = async () => {
+        if (!activeTask) return;
+
+        const token = localStorage.getItem('accessToken');
+        const updatedPomodoros = (activeTask.pomodoros_concluidos || 0) + 1;
+
+        try {
+            await axios.put(`http://127.0.0.1:5000/api/tarefas/${activeTask.id}`,
+                { pomodoros_concluidos: updatedPomodoros },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            fetchTarefas();
+            setActiveTask(null);
+            alert(`Pomodoro para a tarefa "${activeTask.titulo}" concluído!`);
+        } catch (err) {
+            setError('Não foi possível registrar o pomodoro.');
+        }
+    };
+    
+    const handleAddTask = async (formData) => { /* ... sua função handleAddTask ... */ };
+    const handleDeleteTask = async (id) => { /* ... sua função handleDeleteTask ... */ };
+    const handleUpdateTask = async (id, taskData) => { /* ... sua função handleUpdateTask ... */ };
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         navigate('/login');
     };
     
-    // --- Dados fake do gráfico (pode ser mantido por enquanto) ---
-    const productivityData = {
-        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
-        datasets: [{
-            label: 'Horas Focadas',
-            data: [6, 7.5, 5, 8, 7],
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        }],
-    };
+    const productivityData = { /* ... seus dados fake ... */ };
 
-    // --- RENDERIZAÇÃO CONDICIONAL ---
-    if (loading) {
-        return <Container sx={{ display: 'flex', justifyContent: 'center', mt: '20%' }}><CircularProgress /></Container>;
-    }
+    if (loading) return <Container sx={{ display: 'flex', justifyContent: 'center', mt: '20%' }}><CircularProgress /></Container>;
+    if (error) return <Container sx={{ mt: '20%' }}><Alert severity="error">{error}</Alert></Container>;
 
-    if (error) {
-        return <Container sx={{ mt: '20%' }}><Alert severity="error">{error}</Alert></Container>;
-    }
-
-    // --- CONTEÚDO PRINCIPAL ---
     return (
         <div className='body-home'>
             <div className="app-container">
-                <Header onLogout={handleLogout} /> {/* Passando a função de logout para o Header */}
+                <Header onLogout={handleLogout} />
                 <Container sx={{ mt: '150px' }}>
                     <Box className="main-content">
-                        {/* Lado Esquerdo: Passando as tarefas para o TaskList */}
-                        <TaskList tarefas={tarefas} />
-
-                        {/* Lado Direito */}
+                        <TaskList
+                            tarefas={tarefas}
+                            onAddTask={handleAddTask}
+                            onDeleteTask={handleDeleteTask}
+                            onUpdateTask={handleUpdateTask}
+                            onSelectTask={setActiveTask}
+                            activeTaskId={activeTask ? activeTask.id : null}
+                        />
                         <Box className="right-panel">
-                            <PomodoroTimer />
+                            <PomodoroTimer 
+                                activeTask={activeTask}
+                                onPomodoroComplete={handlePomodoroComplete} 
+                            />
                             <Box sx={{ mt: 4 }}>
                                 <ProductivityChart data={productivityData} />
                             </Box>
@@ -90,6 +103,6 @@ const Home = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Home;
