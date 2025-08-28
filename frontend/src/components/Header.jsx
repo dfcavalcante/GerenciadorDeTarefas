@@ -1,72 +1,86 @@
 // src/components/Header.jsx
 
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
+// NOVO: Adicionamos Menu e MenuItem
+import { AppBar, Toolbar, Typography, IconButton, Box, Menu, MenuItem } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // Importa a função da nova biblioteca
+import { jwtDecode } from 'jwt-decode';
 
 const Header = () => {
     const navigate = useNavigate();
-    
-    // Estado para guardar o nome do usuário
     const [username, setUsername] = useState(null);
 
-    // useEffect para ler o token quando o componente carregar
+    // --- LÓGICA DO MENU ---
+    // Estado para controlar onde o menu vai aparecer
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isMenuOpen = Boolean(anchorEl);
+
+    // Função para abrir o menu na posição do ícone
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    // Função para fechar o menu
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+    // --- FIM DA LÓGICA DO MENU ---
+
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token) {
             try {
-                // Decodifica o token para acessar o payload
                 const decodedToken = jwtDecode(token);
-                // Salva o nome do token no nosso estado
-                setUsername(decodedToken.nome);
+                setUsername(decodedToken.nome); // Usando o campo 'nome' que definimos
             } catch (error) {
                 console.error("Token inválido:", error);
-                // Se o token for inválido, podemos limpar e deslogar
-                handleLogout();
+                handleLogout(); // Se o token for inválido, desloga
             }
         }
-    }, []); // O array vazio [] faz isso rodar apenas uma vez
+    }, []);
 
     const handleLogout = () => {
+        handleMenuClose(); // Fecha o menu antes de deslogar
         localStorage.removeItem('accessToken');
         navigate('/login');
     };
   
     return(
-        <AppBar position="fixed" sx={{
-            height: 120,
-            backgroundPosition: 'center',
-        }}>
+        <AppBar position="fixed" sx={{ /* ... seus estilos ... */ }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
                 {/* Logo e título */}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <img
-                        src="/images/pomodoro2.png" // Usar /images/ para caminho a partir da pasta public
-                        alt="Logo pomodoro"
-                        style={{ height: 100, width: 'auto', padding:'20px'}}
-                    />
-                    <Typography
-                        variant="h2"
-                        component="h1"
-                        sx={{ fontWeight: 'bold', userSelect: 'none', fontSize: '40px' }}
-                    >
+                    {/* ... seu código do logo e título ... */}
+                    <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', userSelect: 'none', fontSize: '40px' }}>
                         Pomodoro Timer
                     </Typography>
                 </Box>
 
-                {/* Saudação e Botão de Logout */}
+                {/* Saudação e Ícone do Usuário */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Typography>
-                        {/* Exibe o nome do usuário se ele existir, senão, não mostra nada */}
                         {username ? `Olá, ${username}` : ''}
                     </Typography>
                     
-                    {/* O ícone agora é um botão de logout */}
-                    <IconButton color="inherit" onClick={handleLogout} title="Sair">
+                    {/* ALTERADO: O ícone agora abre o menu */}
+                    <IconButton
+                        color="inherit"
+                        onClick={handleMenuOpen} // Chama a função para abrir o menu
+                        title="Opções do Usuário"
+                    >
                         <AccountCircleIcon sx={{ fontSize: '50px' }} />
                     </IconButton>
+
+                    {/* --- COMPONENTE DO MENU --- */}
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={isMenuOpen}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={handleMenuClose}>Meu Perfil</MenuItem>
+                        <MenuItem onClick={handleLogout}>Sair</MenuItem>
+                    </Menu>
                 </Box>
             </Toolbar>
         </AppBar>
