@@ -63,9 +63,9 @@ const Login = () => {
                             required
                             fullWidth
                             id="username"
-                            label="Usuário"
+                            label="email"
                             name="username"
-                            autoComplete="username"
+                            autoComplete="email"
                             autoFocus
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}

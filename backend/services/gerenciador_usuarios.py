@@ -22,10 +22,27 @@ def obter_usuario_por_username(username):
             return usuario
     return None
 
-def adicionar_usuario(username, password):
+# ALTERADO: A função agora aceita 'nome_completo'
+def adicionar_usuario(username, password, nome_completo):
     usuarios = _carregar_usuarios()
     if obter_usuario_por_username(username):
         return None  # Usuário já existe
+
+    novo_id = max([u['id'] for u in usuarios]) + 1 if usuarios else 1
+    
+    password_hash = generate_password_hash(password)
+    
+    novo_usuario = {
+        'id': novo_id,
+        'username': username, # Este ainda será o email
+        'password_hash': password_hash,
+        'nome_completo': nome_completo # NOVO CAMPO SALVO!
+    }
+    
+    usuarios.append(novo_usuario)
+    _salvar_usuarios(usuarios)
+    
+    return novo_usuario
 
     novo_id = max([u['id'] for u in usuarios]) + 1 if usuarios else 1
     
