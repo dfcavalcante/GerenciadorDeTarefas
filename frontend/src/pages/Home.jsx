@@ -1,6 +1,4 @@
-// src/pages/Home.jsx
-
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // 1. Importe o useCallback
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -14,8 +12,10 @@ const Home = () => {
     const [tarefas, setTarefas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [activeTask, setActiveTask] = useState(null); // Estado para a tarefa ativa
+    const [activeTask, setActiveTask] = useState(null);
 
+    // 2. Envolvemos a função fetchTarefas com o useCallback
+    // Isso cria uma versão "memorizada" da função que não é recriada a cada renderização.
     const fetchTarefas = useCallback(async () => {
         const token = localStorage.getItem('accessToken');
         if (!token) {
@@ -37,18 +37,17 @@ const Home = () => {
         } finally {
             setLoading(false);
         }
-    }, [navigate]);
+    }, [navigate]); // O navigate é uma dependência estável
 
+    // 3. O useEffect agora depende da função memorizada, e só vai rodar uma vez.
     useEffect(() => {
         fetchTarefas();
     }, [fetchTarefas]);
 
     const handlePomodoroComplete = async () => {
         if (!activeTask) return;
-
         const token = localStorage.getItem('accessToken');
         const updatedPomodoros = (activeTask.pomodoros_concluidos || 0) + 1;
-
         try {
             await axios.put(`http://127.0.0.1:5000/api/tarefas/${activeTask.id}`,
                 { pomodoros_concluidos: updatedPomodoros },
@@ -62,15 +61,12 @@ const Home = () => {
         }
     };
     
-    const handleAddTask = async (formData) => { /* ... sua função handleAddTask ... */ };
-    const handleDeleteTask = async (id) => { /* ... sua função handleDeleteTask ... */ };
-    const handleUpdateTask = async (id, taskData) => { /* ... sua função handleUpdateTask ... */ };
-    const handleLogout = () => {
-        localStorage.removeItem('accessToken');
-        navigate('/login');
-    };
-    
-    const productivityData = { /* ... seus dados fake ... */ };
+    // ... Suas outras funções (handleAddTask, handleDeleteTask, etc.)
+    const handleLogout = () => { /* ... */ };
+    const handleAddTask = async (formData) => { /* ... */ };
+    const handleDeleteTask = async (id) => { /* ... */ };
+    const handleUpdateTask = async (id, taskData) => { /* ... */ };
+    const productivityData = { /* ... */ };
 
     if (loading) return <Container sx={{ display: 'flex', justifyContent: 'center', mt: '20%' }}><CircularProgress /></Container>;
     if (error) return <Container sx={{ mt: '20%' }}><Alert severity="error">{error}</Alert></Container>;
