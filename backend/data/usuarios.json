@@ -4,5 +4,11 @@
     "username": "danilo.cavalcante.2006@gmail.com",
     "password_hash": "scrypt:32768:8:1$c1aN3hNNukkk3xP6$5317b8ec17d85d46d8958bdf7aa3338dd437cffc5cb315225e9501e981659ea7034ad119d7cf09047db8ac11688698486d711d93261eb29327c2386b58029bd7",
     "nome_completo": "Danilo"
+  },
+  {
+    "id": 2,
+    "username": "rennan@gmail.com",
+    "password_hash": "scrypt:32768:8:1$XGTCMBAWHyvOkBRR$2974fe527126cdebabd835eb9650e39933d5347b67949f52d5babffabb976f6d361a2557eb2fcf7b7e0148a231fb0532d5dac5cdbbddb8bf4c3eaf45b9c8ebb8",
+    "nome_completo": "rennan"
   }
 ]

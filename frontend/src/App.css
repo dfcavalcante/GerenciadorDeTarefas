@@ -1,28 +1,26 @@
 /* src/App.css */
 body {
-  /* Define a cor de fundo clara para a página inteira */
-
+  background-color: #f8fafc;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .app-container {
   min-height: 100vh;
 }
 
+/* Container que organiza as duas colunas */
 .main-content {
-  /* A MÁGICA ACONTECE AQUI! */
-  /* display: flex coloca os filhos diretos (TaskList e right-panel) lado a lado */
   display: flex;
-  
-  flex-wrap: wrap; 
-  gap: 32px; /* Espaçamento entre as colunas */
-  justify-content: center; /* Centraliza o conteúdo horizontalmente */
-  align-items: flex-start; /* Alinha os itens no topo */
+  justify-content: center; /* Centraliza as colunas na página */
+  align-items: flex-start; /* Alinha as colunas no topo */
+  flex-wrap: wrap; /* Permite que quebre a linha em telas menores */
+  gap: 32px; /* Espaço entre as colunas */
 }
 
+/* Coluna da direita que empilha o Timer e o Gráfico */
 .right-panel {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Empilha os itens verticalmente */
   gap: 32px; /* Espaço entre o Pomodoro e o Gráfico */
 }

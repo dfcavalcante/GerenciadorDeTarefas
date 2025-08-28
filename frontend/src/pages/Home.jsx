@@ -7,6 +7,13 @@ import PomodoroTimer from '../components/PomodoroTimer';
 import ProductivityChart from '../components/ProductivityChart';
 import { Box, Container, CircularProgress, Alert } from '@mui/material';
 
+const productivityData = [
+    { name: 'Seg', pomodoros: 0 }, { name: 'Ter', pomodoros: 0 },
+    { name: 'Qua', pomodoros: 0 }, { name: 'Qui', pomodoros: 0 },
+    { name: 'Sex', pomodoros: 0 }, { name: 'Sáb', pomodoros: 0 },
+    { name: 'Dom', pomodoros: 0 },
+];
+
 const Home = () => {
     const navigate = useNavigate();
     const [tarefas, setTarefas] = useState([]);
@@ -21,7 +28,6 @@ const Home = () => {
             return;
         }
         try {
-            setLoading(true);
             const response = await axios.get('http://127.0.0.1:5000/api/tarefas', {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -40,6 +46,38 @@ const Home = () => {
     useEffect(() => {
         fetchTarefas();
     }, [fetchTarefas]);
+
+    // ... (todas as suas outras funções handle... continuam aqui, sem alterações)
+    const handleToggleTask = async (task) => {
+        const token = localStorage.getItem('accessToken');
+        const novoStatus = task.status === 'concluida' ? 'pendente' : 'concluida';
+        try {
+            await axios.put(`http://127.0.0.1:5000/api/tarefas/${task.id}`,
+                { status: novoStatus },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            fetchTarefas();
+        } catch (err) {
+            setError('Falha ao atualizar o estado da tarefa.');
+        }
+    };
+
+    const handlePomodoroComplete = async () => {
+        if (!activeTask) return;
+        const token = localStorage.getItem('accessToken');
+        const updatedPomodoros = (activeTask.pomodoros_concluidos || 0) + 1;
+        try {
+            await axios.put(`http://127.0.0.1:5000/api/tarefas/${activeTask.id}`,
+                { pomodoros_concluidos: updatedPomodoros },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            fetchTarefas();
+            setActiveTask(null);
+            alert(`Pomodoro para a tarefa "${activeTask.titulo}" concluído!`);
+        } catch (err) {
+            setError('Não foi possível registar o pomodoro.');
+        }
+    };
 
     const handleAddTask = async (formData) => {
         const token = localStorage.getItem('accessToken');
@@ -67,7 +105,7 @@ const Home = () => {
             });
             fetchTarefas();
         } catch (err) {
-            setError('Falha ao deletar tarefa.');
+            setError('Falha ao apagar tarefa.');
         }
     };
 
@@ -87,19 +125,6 @@ const Home = () => {
             setError('Falha ao editar tarefa.');
         }
     };
-    
-    const handleLogout = () => {
-        localStorage.removeItem('accessToken');
-        navigate('/login');
-    };
-    
-    const productivityData = {
-        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
-        datasets: [{
-            label: 'Horas Focadas', data: [6, 7.5, 5, 8, 7],
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        }],
-    };
 
     if (loading) return <Container sx={{ display: 'flex', justifyContent: 'center', mt: '20%' }}><CircularProgress /></Container>;
     if (error) return <Container sx={{ mt: '20%' }}><Alert severity="error">{error}</Alert></Container>;
@@ -107,24 +132,26 @@ const Home = () => {
     return (
         <div className='body-home'>
             <div className="app-container">
-                <Header onLogout={handleLogout} />
+                <Header />
                 <Container sx={{ mt: '150px' }}>
                     <Box className="main-content">
+                        {/* Coluna da Esquerda */}
                         <TaskList
                             tarefas={tarefas}
                             onAddTask={handleAddTask}
                             onDeleteTask={handleDeleteTask}
                             onUpdateTask={handleUpdateTask}
+                            onToggleTask={handleToggleTask}
                             onSelectTask={setActiveTask}
                             activeTaskId={activeTask ? activeTask.id : null}
                         />
+                        {/* Coluna da Direita */}
                         <Box className="right-panel">
-                            <PomodoroTimer 
+                            <PomodoroTimer
                                 activeTask={activeTask}
+                                onPomodoroComplete={handlePomodoroComplete}
                             />
-                            <Box sx={{ mt: 4 }}>
-                                <ProductivityChart data={productivityData} />
-                            </Box>
+                            <ProductivityChart data={productivityData} />
                         </Box>
                     </Box>
                 </Container>

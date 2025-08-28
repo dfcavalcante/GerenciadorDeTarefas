@@ -50,9 +50,10 @@ const PomodoroTimer = ({ activeTask, onPomodoroComplete }) => {
     };
 
     return (
-        <Box sx={{ mt: 5, p: 4, backgroundColor: "white", borderRadius: 3, boxShadow: 3, display: "flex", flexDirection: "column", alignItems: "center", width: 'auto', mx: "auto" }}>
+        // --- ALTERAÇÃO AQUI: Removido o "mt: 5" ---
+        <Box sx={{ p: 4, backgroundColor: "white", borderRadius: 3, boxShadow: 3, display: "flex", flexDirection: "column", alignItems: "center", width: 'auto', mx: "auto" }}>
             <Typography variant="h6" sx={{ mb: 2, height: '3rem', textAlign: 'center' }}>
-                {activeTask ? `Focando em: ${activeTask.titulo}` : 'Selecione uma tarefa para focar'}
+                {activeTask ? `A focar em: ${activeTask.titulo}` : 'Selecione uma tarefa para focar'}
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 2, paddingBottom: '20px' }}>
